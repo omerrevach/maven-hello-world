@@ -49,19 +49,19 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE="${{ vars.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
           echo "Building image: $IMAGE"
           docker build -t "$IMAGE" .
 
       - name: Push Docker image
         run: |
-          IMAGE="${{ vars.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
           echo "Pushing image: $IMAGE"
           docker push "$IMAGE"
 
       - name: Pull and run Docker image
         run: |
-          IMAGE="${{ vars.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
+          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
           echo "Verifying image: $IMAGE"
           docker pull "$IMAGE"
           docker run --rm "$IMAGE"
