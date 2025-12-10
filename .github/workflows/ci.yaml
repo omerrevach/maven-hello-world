@@ -15,6 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Scan source code with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: './'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '0'
+
       - uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -52,6 +62,15 @@ jobs:
           IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
           echo "Building image: $IMAGE"
           docker build -t "$IMAGE" .
+
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ vars.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+          exit-code: '0'
 
       - name: Push Docker image
         run: |

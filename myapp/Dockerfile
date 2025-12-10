@@ -15,4 +15,4 @@ COPY --from=builder /app/target/myapp-*.jar app.jar
 # no root
 USER appuser
 
-CMD ["java", "-jar", "my-app.jar"] 
+ENTRYPOINT ["java", "-jar", "app.jar"]
