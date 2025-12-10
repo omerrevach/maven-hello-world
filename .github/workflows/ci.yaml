@@ -25,9 +25,17 @@ jobs:
         run: |
           BASE_VERSION="1.0"
           PATCH="${GITHUB_RUN_NUMBER}"
+          NEW_VERSION="${BASE_VERSION}.${PATCH}"
+          echo "New version: ${NEW_VERSION}"
+
           mvn -q versions:set \
-            -DnewVersion=${BASE_VERSION}.${PATCH} \
+            -DnewVersion=${NEW_VERSION} \
             -DgenerateBackupPoms=false
+
+          # version available to later steps
+          echo "VERSION=${NEW_VERSION}" >> $GITHUB_ENV
+
+
 
       # it runs validate, compile, test, package and verify. it runs lifecycle and all phase beofre verify
       - name: Build with Maven
@@ -41,19 +49,19 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
+          IMAGE="${{ vars.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
           echo "Building image: $IMAGE"
           docker build -t "$IMAGE" .
 
       - name: Push Docker image
         run: |
-          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
+          IMAGE="${{ vars.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
           echo "Pushing image: $IMAGE"
           docker push "$IMAGE"
 
       - name: Pull and run Docker image
         run: |
-          IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
+          IMAGE="${{ vars.DOCKERHUB_USERNAME }}/myapp:${VERSION}"
           echo "Verifying image: $IMAGE"
           docker pull "$IMAGE"
           docker run --rm "$IMAGE"
