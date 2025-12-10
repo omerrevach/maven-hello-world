@@ -1,0 +1,23 @@
+1. validate
+* What it does:
+    Makes sure the project structure is correct.
+    Checks that pom.xml exists
+    Checks required folders (src/main/java, etc.)
+    Ensures Maven understands the project metadata
+tests runs unit tests
+
+4. package
+    What it does:
+    Packages the compiled code into a JAR or WAR.
+    For your project:
+    target/myapp-1.0.x.jar
+    This JAR is the output application.
+
+5. verify
+    What it does:
+    Runs additional quality checks.
+
+    Examples:
+    Verifies integration tests (if any)
+    Ensures JAR meets all requirements
+    Runs plugin checks (code coverage, validations)
