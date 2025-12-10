@@ -19,7 +19,11 @@ jobs:
 
       - name: Bump patch version
         run: |
-          mvn versions:increment-patch -DgenerateBackupPoms=false
+          BASE_VERSION="1.0"
+          PATCH="${GITHUB_RUN_NUMBER}"
+          mvn -q versions:set \
+            -DnewVersion=${BASE_VERSION}.${PATCH} \
+            -DgenerateBackupPoms=false
 
       # it runs validate, compile, test, package and verify. it runs lifecycle and all phase beofre verify
       - name: Build with Maven
